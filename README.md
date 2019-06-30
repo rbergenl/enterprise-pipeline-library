@@ -1,6 +1,19 @@
 Enterprise Pipeline Library
 ---
 
+sendTriggerIntegration      <- key <- GitHub (Hook) -  provision a build agent in response to demand, e.g. a PR request, or a push to master in your GitHub repo.
+receiveTriggerIntegration
+checkoutSCM                 -> key -> Github
+scanSonar                   -> key -> SonarQube
+gitRelease                  -> key -> Github
+npmPublish                  -> key -> Nexus
+uploadAWS                   -> key -> AWS Dev
+
+receiveTriggerDeployment
+deployAWSDev                -> key -> AWS Dev
+deployAWSTest               -> key -> AWS Test
+deployAWSProd               -> key -> AWS Prod
+
 # Getting Started
 - Initial Master configuration: jenkins.config.json
 - Docker: build
@@ -23,8 +36,17 @@ Enterprise Pipeline Library
 > Folders with an * are not source code but contains generated files
 
 # Continuous Integration
+- Blog: https://jenkins.io/blog/2018/10/16/custom-war-packager/#jenkinsfile-runner-packaging
+- Usage: https://github.com/jenkinsci/jenkinsfile-runner/blob/master/DOCKER.md
+- `docker run --rm -v $PWD/demo/Jenkinsfile:/workspace/Jenkinsfile onenashev/cwp-jenkinsfile-runner-demo`
+- `docker build -t rbergenl/jenkinsfile-runner:latest --build-arg JENKINS_VERSION=2.121.1 .`
+- `docker run --rm -v ${PWD}:/workspace rbergenl/jenkinsfile-runner:latest`
 
-- https://github.com/jenkinsci/jenkinsfile-runner
+## Permissions
+- Give Jenkins permissions to the SCM repository (using SSH keys)
+- Give Jenkins permissions to SonarQube (username/password)
+- Give Jenkins permissions to publish to Nexus (npm add user username:password)
+- Give Jenkins permissions to publish to AWS S3 (externalID and assumeRole)
 
 # Continuous Deployment
 The shared templates to create a pipeline are host in a S3 bucket.
@@ -38,6 +60,9 @@ Two deployment pipelines are available:
 
 CloudFormation templates to create an infrastructure stack on AWS
 
+## Permissions
+- Give the AWS Production account a cloudformation role which trusts the AWS Development account
+- Give the AWS Development account permission to pull from Nexus (username:password)
 
 # Contributing
 - Read the `CONTRIBUTING.md` file for the guidelines.
