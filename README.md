@@ -31,6 +31,7 @@ deployAWSProd               -> key -> AWS Prod
     |   ├── docker-java         # A pipeline that ends up with publishing a Java runtime image to a Docker registry
     |   ├── docker-node         # A pipeline that ends up with publishing a Node runtime image to a Docker registry
     |   └── npm                 # A pipeline that ends up with publishing a package to a NPM registry
+    ├── Dockerfile              # Jenkins uses this as an agent which has all cli tools needed for all steps
     └── var                     # Groovy files with commands for each step in a pipeline
 
 > Folders with an * are not source code but contains generated files
